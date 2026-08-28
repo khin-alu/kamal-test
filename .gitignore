@@ -33,3 +33,7 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Local dev registry credentials (only used for the local libvirt VM test setup).
+/.kamal/registry_password
+/.kamal/registry_htpasswd
+
