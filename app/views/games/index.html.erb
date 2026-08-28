@@ -1,0 +1,40 @@
+<% content_for :title, "Tic Tac Toe" %>
+
+<div class="scene">
+  <div class="game" data-controller="tic-tac-toe">
+    <header class="game__header">
+      <h1 class="game__title">Tic <span class="game__title-accent">Tac</span> Toe</h1>
+      <p class="game__status" data-tic-tac-toe-target="status">Player X's turn</p>
+    </header>
+
+    <div class="board" data-tic-tac-toe-target="board">
+      <% 9.times do |i| %>
+        <button
+          type="button"
+          class="cell"
+          data-tic-tac-toe-target="cell"
+          data-index="<%= i %>"
+          data-action="click->tic-tac-toe#play"
+          aria-label="Cell <%= i + 1 %>"
+        ></button>
+      <% end %>
+    </div>
+
+    <div class="scoreboard">
+      <div class="score score--x">
+        <span class="score__label">X</span>
+        <span class="score__value" data-tic-tac-toe-target="scoreX">0</span>
+      </div>
+      <div class="score score--draw">
+        <span class="score__label">Draws</span>
+        <span class="score__value" data-tic-tac-toe-target="scoreDraw">0</span>
+      </div>
+      <div class="score score--o">
+        <span class="score__label">O</span>
+        <span class="score__value" data-tic-tac-toe-target="scoreO">0</span>
+      </div>
+    </div>
+
+    <button type="button" class="reset-btn" data-action="click->tic-tac-toe#reset">New Game</button>
+  </div>
+</div>

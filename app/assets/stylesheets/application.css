@@ -8,3 +8,227 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+:root {
+  --bg-a: #1a0b3d;
+  --bg-b: #3a0ca3;
+  --bg-c: #7209b7;
+  --neon-cyan: #00f5ff;
+  --neon-pink: #ff2e93;
+  --neon-yellow: #ffd60a;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --text: #f5f3ff;
+  --text-dim: rgba(245, 243, 255, 0.65);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Baloo 2", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 46, 147, 0.35), transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(0, 245, 255, 0.3), transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(255, 214, 10, 0.2), transparent 45%),
+    linear-gradient(135deg, var(--bg-a), var(--bg-b) 55%, var(--bg-c));
+  background-attachment: fixed;
+}
+
+.scene {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+.game {
+  width: 100%;
+  max-width: 420px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 28px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  text-align: center;
+}
+
+.game__header {
+  margin-bottom: 1.75rem;
+}
+
+.game__title {
+  margin: 0 0 0.4rem;
+  font-size: clamp(1.8rem, 6vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink) 55%, var(--neon-yellow));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255, 46, 147, 0.25));
+}
+
+.game__title-accent {
+  /* inherits the title's gradient text fill */
+}
+
+.game__status {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  min-height: 1.4em;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+.game__status--x {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 14px rgba(0, 245, 255, 0.5);
+}
+
+.game__status--o {
+  color: var(--neon-pink);
+  text-shadow: 0 0 14px rgba(255, 46, 147, 0.5);
+}
+
+.game__status--draw {
+  color: var(--neon-yellow);
+  text-shadow: 0 0 14px rgba(255, 214, 10, 0.5);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.75rem;
+}
+
+.cell {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  border-top: 3px solid var(--cell-accent, var(--glass-border));
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: clamp(2rem, 8vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cell:nth-child(9n + 1) { --cell-accent: var(--neon-cyan); }
+.cell:nth-child(9n + 2) { --cell-accent: var(--neon-yellow); }
+.cell:nth-child(9n + 3) { --cell-accent: var(--neon-pink); }
+.cell:nth-child(9n + 4) { --cell-accent: var(--neon-pink); }
+.cell:nth-child(9n + 5) { --cell-accent: var(--neon-cyan); }
+.cell:nth-child(9n + 6) { --cell-accent: var(--neon-yellow); }
+.cell:nth-child(9n + 7) { --cell-accent: var(--neon-yellow); }
+.cell:nth-child(9n + 8) { --cell-accent: var(--neon-pink); }
+.cell:nth-child(9n + 9) { --cell-accent: var(--neon-cyan); }
+
+.cell:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--cell-accent, transparent);
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.cell--filled {
+  animation: pop 0.25s ease;
+}
+
+.cell--x {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 12px rgba(0, 245, 255, 0.8), 0 0 28px rgba(0, 245, 255, 0.4);
+}
+
+.cell--o {
+  color: var(--neon-pink);
+  text-shadow: 0 0 12px rgba(255, 46, 147, 0.8), 0 0 28px rgba(255, 46, 147, 0.4);
+}
+
+.cell--win {
+  background: rgba(255, 214, 10, 0.18);
+  border-color: var(--neon-yellow);
+  animation: glow-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 214, 10, 0.35); }
+  50% { box-shadow: 0 0 26px rgba(255, 214, 10, 0.75); }
+}
+
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.score {
+  padding: 0.6rem 0.4rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.score__label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.score__value {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.score--x .score__value { color: var(--neon-cyan); }
+.score--o .score__value { color: var(--neon-pink); }
+.score--draw .score__value { color: var(--neon-yellow); }
+
+.reset-btn {
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #1a0b3d;
+  background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.reset-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255, 46, 147, 0.35);
+}
+
+.reset-btn:active {
+  transform: translateY(0);
+}
